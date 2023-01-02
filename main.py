@@ -63,10 +63,21 @@ def solve_network(edges: List[Edge], knowns_list: List[Tuple[Edge, float]], auxi
         varsets[varset] = {'aux_eq': aux_eq}
 
     # Check redundancy of initial knowns
+
+    ## Each 'central' node has a conservation equation, total in == total out. Hence this number is the number of constraints
+    nodes_with_sources_and_sinks = [name for name,node in nodes.items() if len(node.sources) > 0 and len(node.sinks) > 0]
+    source_or_sink_nodes = [name for name in nodes.keys() if name not in nodes_with_sources_and_sinks]
+
+    ## Immediately throw error if system is overconstrained by number of knowns exceeding degrees of freedom
+    if len(knowns) > len(edges) - len(nodes) + len(source_or_sink_nodes):
+        raise RedundancyError(f'Values for {len(knowns)} edges were given as known, exceeding the ({len(edges) - len(nodes) + len(source_or_sink_nodes)} == {len(edges)} - {len(nodes)} + {len(source_or_sink_nodes)}) total degrees of freedom. Please remove knowns until they are equal or fewer than this.')
+
+    ## Otherwise check if system in overconstrained internally
     temp_knowns = []
-    for k in knowns.keys():
+    knowns_ordered = list(knowns.keys())
+    for i, k in enumerate(knowns_ordered):
         if k in temp_knowns:
-            raise RedundancyError()
+            raise RedundancyError(f'The value of {k} is given as a known value, but can also be calculated from known values {knowns_ordered[:i+1]}. Please remove one of these edges from the list of knowns to stop overconstraining the system.')
         temp_knowns.append(k)
         for _ in range(ITER_MAX):
             varset_unknowns = {varset:[v for v in varset if v not in temp_knowns] for varset in varsets.keys()}
@@ -113,16 +124,22 @@ def solve_network(edges: List[Edge], knowns_list: List[Tuple[Edge, float]], auxi
 
 if __name__ == '__main__':
 
-    import igraph as ig
+    # import igraph as ig
     
-    edges = [Edge(0,1), Edge(1,2), Edge(1,3), Edge(2,4), Edge(3,5), Edge(3,6), Edge(4,6), Edge(5,7), Edge(6,7), Edge(7,8)]
-    # edges = (
-    #     [Edge(0, i) for i in range(11,15+1)]
-    #     + [Edge(i,j) for i in range(11,15+1) for j in range(21,25+1)]
-    #     + [Edge(i,j) for i in range(21,25+1) for j in range(31,35+1)]
-    #     + [Edge(i,40) for i in range(31, 35+1)]
-    # )
-    g = ig.Graph(edges=[(source, sink) for source, sink in edges], directed=True)
+    # edges = [Edge(0,1), Edge(1,2), Edge(1,3), Edge(2,4), Edge(3,5), Edge(3,6), Edge(4,6), Edge(5,7), Edge(6,7), Edge(7,8)]
+    # # edges = (
+    # #     [Edge(0, i) for i in range(11,15+1)]
+    # #     + [Edge(i,j) for i in range(11,15+1) for j in range(21,25+1)]
+    # #     + [Edge(i,j) for i in range(21,25+1) for j in range(31,35+1)]
+    # #     + [Edge(i,40) for i in range(31, 35+1)]
+    # # )
+    # g = ig.Graph(edges=[(source, sink) for source, sink in edges], directed=True)
 
-    print(1)
-    print(g.all_st_cuts(0,40))
+    # print(1)
+    # print(g.all_st_cuts(0,40))
+
+    edges = [Edge('A','B'), Edge('B','C'), Edge('B','D'), Edge('C','E'), Edge('D','F'), Edge('D','G'), Edge('E','G'), Edge('F','H'), Edge('G','H'), Edge('H','I')]
+
+    knowns_list = [(Edge('B','D'), 3), (Edge('D','G'), 2), (Edge('F','H'), 1)]
+    solution = solve_network(edges, knowns_list)
+    print(solution)
