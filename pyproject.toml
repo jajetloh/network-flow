@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "network_flow_solver"
-version = "0.0.3"
+version = "0.0.4"
 authors = [
   { name="Ja-Jet Loh", email="jajet.codes@gmail.com" },
 ]
