@@ -123,23 +123,7 @@ def solve_network(edges: List[Edge], knowns_list: List[Tuple[Edge, float]], auxi
     return knowns
 
 if __name__ == '__main__':
-
-    # import igraph as ig
-    
-    # edges = [Edge(0,1), Edge(1,2), Edge(1,3), Edge(2,4), Edge(3,5), Edge(3,6), Edge(4,6), Edge(5,7), Edge(6,7), Edge(7,8)]
-    # # edges = (
-    # #     [Edge(0, i) for i in range(11,15+1)]
-    # #     + [Edge(i,j) for i in range(11,15+1) for j in range(21,25+1)]
-    # #     + [Edge(i,j) for i in range(21,25+1) for j in range(31,35+1)]
-    # #     + [Edge(i,40) for i in range(31, 35+1)]
-    # # )
-    # g = ig.Graph(edges=[(source, sink) for source, sink in edges], directed=True)
-
-    # print(1)
-    # print(g.all_st_cuts(0,40))
-
     edges = [Edge('A','B'), Edge('B','C'), Edge('B','D'), Edge('C','E'), Edge('D','F'), Edge('D','G'), Edge('E','G'), Edge('F','H'), Edge('G','H'), Edge('H','I')]
-
     knowns_list = [(Edge('B','D'), 3), (Edge('D','G'), 2), (Edge('F','H'), 1)]
     solution = solve_network(edges, knowns_list)
     print(solution)
