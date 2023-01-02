@@ -3,9 +3,9 @@
 This package can be used for solving for flow values through edges of a (directed) network/graph, given known values for a subset of edges. The solving facility also detects inconsistencies within the given known values, and can also solve for certain flows/edges if not enough knowns are given to determine all values.
 
 e.g.
-![image](network_flow/images/img_01.png)
+![image](network_flow_solver/images/img/img_01.png)
 solves to
-![image](network_flow/images/img_02.png)
+![image](network_flow_solver/images/img/img_02.png)
 
 
 # 2. Fully Solving a Network
@@ -22,7 +22,7 @@ edges = [Edge('A','B'), Edge('B','C'), Edge('B','D'), Edge('C','E'), Edge('D','F
 knowns_list = [(Edge('B','C'), 7), (Edge('D','G'), 2), (Edge('F','H'), 1)]
 ```
 
-![image](network_flow/images/img_01.png)
+![image](network_flow_solver/images/img/img_01.png)
 
 The solver finds the flows for all remaining edges
 
@@ -44,7 +44,7 @@ solution = solve_network(edges, knowns_list)
 # }
 ```
 
-![image](network_flow/images/img_02.png)
+![image](network_flow_solver/images/img/img_02.png)
 
 **Note**
 
@@ -67,7 +67,7 @@ edges = [Edge('A','B'), Edge('B','C'), Edge('B','D'), Edge('C','E'), Edge('D','F
 
 knowns_list = [(Edge('D','G'), 2), (Edge('F','H'), 1)]
 ```
-![image](network_flow/images/img_03.png)
+![image](network_flow_solver/images/img/img_03.png)
 ```py
 from network_flow_solver import solve_network
 solution = solve_network(edges, knowns_list)
@@ -79,7 +79,7 @@ solution = solve_network(edges, knowns_list)
 #     Edge('F','H'): 1,
 # }
 ```
-![image](network_flow/images/img_04.png)
+![image](network_flow_solver/images/img/img_04.png)
 
 # 4. Overconstraining the Network
 
@@ -92,7 +92,7 @@ edges = [Edge('A','B'), Edge('B','C'), Edge('B','D'), Edge('C','E'), Edge('D','F
 
 knowns_list = [(Edge('B','C'), 7), (Edge('D','G'), 2), (Edge('F','H'), 1), (Edge('H','I'), 10)]
 ```
-![image](network_flow/images/img_05.png)
+![image](network_flow_solver/images/img/img_05.png)
 ```py
 from network_flow_solver import solve_network
 solution = solve_network(edges, knowns_list)
@@ -108,7 +108,7 @@ edges = [Edge('A','B'), Edge('B','C'), Edge('B','D'), Edge('C','E'), Edge('D','F
 
 knowns_list = [(Edge('B','D'), 3), (Edge('D','G'), 2), (Edge('F','H'), 1)]
 ```
-![image](network_flow/images/img_06.png)
+![image](network_flow_solver/images/img/img_06.png)
 ```py
 from network_flow_solver import solve_network
 solution = solve_network(edges, knowns_list)
@@ -127,7 +127,7 @@ edges = [Edge('A','B'), Edge('B','C'), Edge('B','D'), Edge('C','E'), Edge('D','F
 
 knowns_list = [(Edge('B','D'), 3), (Edge('D','G'), 2), (Edge('F','H'), 1)]
 ```
-![image](network_flow/images/img_07.png)
+![image](network_flow_solver/images/img/img_07.png)
 
 Attempting to solve this normally yields the following result
 
@@ -144,7 +144,7 @@ solution = solve_network(edges, knowns_list)
 # }
 ```
 
-![image](network_flow/images/img_08.png)
+![image](network_flow_solver/images/img/img_08.png)
 
 Some edges are correctly solved for - however, with 'BC' and 'BD' given, we also know that the value of 'HI' should be 10. This is because we assume flow is conserved, so AB must equal HI. We can explicitly specify this equality as an *auxiliary equation*, and network is correctly solved.
 
@@ -163,4 +163,4 @@ solution = solve_network(edges, knowns_list, aux_eqns)
 #     Edge('H','I'): 10,
 # }
 ```
-![image](network_flow/images/img_09.png)
+![image](network_flow_solver/images/img/img_09.png)
